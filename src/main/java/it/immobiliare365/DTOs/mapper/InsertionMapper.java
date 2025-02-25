@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -146,6 +147,7 @@ public class InsertionMapper {
         insertion.setHasGarden(dto.getHasGarden());
         insertion.setHasSwimmingPool(dto.getHasSwimmingPool());
         insertion.setIsFurnished(dto.getIsFurnished());
+        insertion.setDateListed(new Date());
 
         // --- IMAGE HANDLING ---
         // Current photos in the entity.

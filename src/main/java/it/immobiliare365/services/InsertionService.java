@@ -3,7 +3,9 @@ package it.immobiliare365.services;
 import it.immobiliare365.DTOs.InsertionRequestDTO;
 import it.immobiliare365.DTOs.InsertionUpdateRequestDTO;
 import it.immobiliare365.DTOs.mapper.InsertionMapper;
+import it.immobiliare365.config.cloudinary.CloudinaryService;
 import it.immobiliare365.models.Insertion;
+import it.immobiliare365.models.SavedImage;
 import it.immobiliare365.models.enums.InsertionStatus;
 import it.immobiliare365.repositories.InsertionRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class InsertionService {
 
     private final InsertionRepository insertionRepository;
     private final InsertionMapper insertionMapper;
+    private final CloudinaryService cloudinaryService;
 
     public Insertion createInsertion(InsertionRequestDTO dto) {
         Insertion insertion = insertionMapper.fromRequestDTO(dto);
@@ -49,6 +52,9 @@ public class InsertionService {
 
     public void deleteInsertion(Long id) {
         Insertion existingInsertion = getInsertionById(id);
+        for (SavedImage savedImage : existingInsertion.getPhotos()) {
+            cloudinaryService.deleteFile(savedImage.getPublicId());
+        }
         insertionRepository.delete(existingInsertion);
     }
 
